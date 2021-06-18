@@ -4,25 +4,21 @@ import java.io.*;
 class Solution {
     public String longestCommonPrefix(String[] strs) {
         
-        if (strs.length == 0) {
-            return "";
-        }
+        Arrays.sort(strs);
         
-        String start = strs[0];
+        String prefix = "";
         
-        for (int i = 1; i < strs.length; i++)
+        for (int i = 0; i < strs[0].length(); i++){
             
-            while (strs[i].indexOf(start) != 0) {
-                
-                start = start.substring(0, start.length() - 1);
-                
-                if (start.isEmpty()) {
-                    return "";
-                }
-            }  
+            if (strs[0].charAt(i) == strs[strs.length - 1].charAt(i)){
+                prefix += Character.toString(strs[0].charAt(i));
+            }   
+            else{
+                return prefix;
+            }
+        } 
         
-        return start;
-        
+        return prefix;
     }
     
 }
