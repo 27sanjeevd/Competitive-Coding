@@ -12,6 +12,6 @@ int main() {
 		int x, y;
 		cin>>pos>>x>>y;
 
-		
+		vals.push_back({pos, x})
 	}
 }
