@@ -5,63 +5,50 @@
 
 using namespace std;
 
+vector<vector<int>> adj(100002);
+vector<int> visited(100002);
+bool continue1 = true;
+
+void dfs(int node, int color) {
+	if (continue1 && visited[node] == 0) {
+		visited[node] = color;
+		for (int y = 0; y < adj[node].size(); y++) {
+			if (visited[adj[node][y]] == color) {
+				cout<<"IMPOSSIBLE\n";
+				continue1 = false;
+			}
+			else {
+				dfs(adj[node][y], color * -1);
+			}
+		}
+	}
+}
+
 int main() {
 	int n, m;
 	cin>>n>>m;
-	vector<vector<int>> adj(n);
 	for (int x = 0; x < m; x++) {
 		int first, second;
 		cin>>first>>second;
-		adj[first-1].push_back(second-1);
-		adj[second-1].push_back(first-1);
+		adj[first].push_back(second);
+		adj[second].push_back(first);
 	}
 
-	unordered_set<int> a, b, visited;
+	dfs(1, 1);
 	for (int x = 1; x <= n; x++) {
-
-		vector<int> temp = adj[x-1];
-		if (a.count(x) > 0) {
-			for (int y = 0; y < temp.size(); y++) {
-				if (a.count(temp[y]) > 0) {
-					cout<<"IMPOSSIBLE";
-					return 0;
-				}
-				else {
-					b.insert(temp[y]);
-				}
-			}
-		}
-		else if (b.count(x) > 0) {
-			for (int y = 0; y < temp.size(); y++) {
-				if (b.count(temp[y]) > 0) {
-					cout<<"IMPOSSIBLE";
-					return 0;
-				}
-				else {
-					a.insert(temp[y]);
-				}
-			}
-		}
-		else {
-			a.insert(x);
-			for (int y = 0; y < temp.size(); y++) {
-				if (a.count(temp[y]) > 0) {
-					cout<<"IMPOSSIBLE";
-					return 0;
-				}
-				else {
-					b.insert(temp[y]);
-				}
-			}
+		if (continue1 && visited[x] == 0) {
+			dfs(x, 1);
 		}
 	}
 
-	for (int x = 1; x <= n; x++) {
-		if (a.count(x) > 0) {
-			cout<<"1 ";
-		}
-		else {
-			cout<<"2 ";
+	if (continue1) {
+		for (int x = 1; x <= n; x++) {
+			if (visited[x] == 1) {
+				cout<<"2 ";
+			}
+			else {
+				cout<<"1 ";
+			}
 		}
 	}
 

@@ -5,49 +5,46 @@
 
 using namespace std;
 
+vector<vector<int>> adj(100002);
+vector<bool> visited(100002);
+
+void dfs(int node) {
+	if (!visited[node]) {
+		visited[node] = true;
+
+		for (int y = 0; y < adj[node].size(); y++) {
+			dfs(adj[node][y]);
+		}
+	}
+}
+
 int main() {
 	int n, m;
 	cin>>n>>m;
-	int main = -1;
-	unordered_set<int> group;
+
 	vector<vector<int>> output;
 
 	for (int x = 0; x < m; x++) {
 		int a, b;
 		cin>>a>>b;
-
-		if (x == 0) {
-			main = a;
-			group.insert(a);
-			group.insert(b);
-		}
-		else {
-			if (group.count(a) > 0 && group.count(b) > 0) {
-				continue;
-			}
-			else if (group.count(a) > 0) {
-				group.insert(b);
-			}
-			else if (group.count(b) > 0) {
-				group.insert(a);
-			}
-			else {
-				group.insert(a);
-				group.insert(b);
-				output.push_back({main, a});
-			}
-		}
+		adj[a].push_back(b);
+		adj[b].push_back(a);
 	}
 
+	dfs(1);
 	for (int x = 1; x <= n; x++) {
-		if (group.count(x) == 0) {
-			output.push_back({main, x});
+		if (!visited[x]) {
+			output.push_back({1, x});
+			adj[1].push_back(x);
+			adj[x].push_back(1);
+
+			dfs(x);
 		}
 	}
 
 	cout<<output.size()<<"\n";
-	for (int x = 0; x < output.size(); x++) {
-		cout<<output[x][0]<<" "<<output[x][1]<<"\n";
+	for (int y = 0; y < output.size(); y++) {
+		cout<<output[y][0]<<" "<<output[y][1]<<"\n";
 	}
 
 	return 0;
